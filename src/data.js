@@ -10,66 +10,58 @@ tchol: Total Cholesterol, mmol/L, 1 mmol/L = 38.67 mg/dL
 trig: Triglycerides, mmol/L, 1 mmol/L = 88.57 mg/dL
 */
 
-import { getExtremeValue } from "./shared/util";
+import { getSortedValues } from "./shared/util";
 
 export const resultTypes = {
   fastingGlucose: {
-    name: "Fasting Glucose",
-    showInLeaderboard: false,
+    name: "Fasting Glucose, mmol/L (lower is better)",
   },
   hbA1c: {
-    name: "HbA1c",
-    showInLeaderboard: true,
-    getBestResult: (data, resultType) => getExtremeValue(data, resultType),
-    getWorstResult: (data, resultType) =>
-      getExtremeValue(data, resultType, { highest: true }),
+    name: "HbA1c, % (lower is better)",
+    leaderboardSort: (data, resultType) => getSortedValues(data, resultType),
   },
   ldl: {
-    name: "LDL Cholesterol",
-    showInLeaderboard: true,
-    getBestResult: (data, resultType) => getExtremeValue(data, resultType),
-    getWorstResult: (data, resultType) =>
-      getExtremeValue(data, resultType, { highest: true }),
+    name: "LDL Cholesterol, mmol/L (lower is better)",
+    leaderboardSort: (data, resultType) => getSortedValues(data, resultType),
   },
-  hdl: { name: "HDL Cholesterol", showInLeaderboard: false },
+  hdl: { name: "HDL Cholesterol, mmol/L (lower is better)" },
   tChol: {
-    name: "Total Cholesterol",
-    showInLeaderboard: true,
-    getBestResult: (data, resultType) =>
-      getExtremeValue(data, resultType),
-    getWorstResult: (data, resultType) => getExtremeValue(data, resultType, { highest: true }),
+    name: "Total Cholesterol, mmol/L (lower is better)",
+    leaderboardSort: (data, resultType) => getSortedValues(data, resultType),
   },
   trig: {
-    name: "Triglycerides",
-    showInLeaderboard: true,
-    getBestResult: (data, resultType) => getExtremeValue(data, resultType),
-    getWorstResult: (data, resultType) =>
-      getExtremeValue(data, resultType, { highest: true }),
+    name: "Triglycerides, mmol/L (lower is better)",
+    leaderboardSort: (data, resultType) => getSortedValues(data, resultType),
   },
 };
 
 export const healthData = {
-  "Ang Huai Chuan": {
+  "Huai Chuan": {
     fastingGlucose: {
       "2017-07-01": 5.5,
+      "2021-11-25": 5.2,
     },
     hbA1c: {
       "2017-07-01": 5.8,
     },
     hdl: {
       "2017-07-01": 1.37,
+      "2021-11-25": 1.04,
     },
     ldl: {
       "2017-07-01": 3.26,
+      "2021-11-25": 3.17,
     },
     tChol: {
       "2017-07-01": 5.69,
+      "2021-11-25": 5.58,
     },
     trig: {
       "2017-07-01": 2.34,
+      "2021-11-25": 3.01,
     },
   },
-  "Ang Huai Kee": {
+  "Huai Kee": {
     fastingGlucose: {
       "2017-08-21": 5.0,
     },
@@ -94,7 +86,7 @@ export const healthData = {
       "2017-08-21": 1.69,
     },
   },
-  "Ang Huai Lee": {
+  "Huai Lee": {
     fastingGlucose: {
       "2017-03-01": 5.34,
       "2021-11-23": 5.6,
@@ -124,7 +116,7 @@ export const healthData = {
       "2021-11-23": 0.72,
     },
   },
-  "Ang Huay Boon": {
+  "Huay Boon": {
     fastingGlucose: {
       "2021-07-17": 5,
     },
@@ -142,7 +134,7 @@ export const healthData = {
       "2021-07-17": 0.6,
     },
   },
-  "Ang Tong Peck": {
+  "Ah Gong": {
     fastingGlucose: {
       "2021-11-23": 9.8,
     },
@@ -160,7 +152,7 @@ export const healthData = {
       "2021-11-23": 2.76,
     },
   },
-  "Ang Whai Hoon": {
+  "Whai Hoon": {
     fastingGlucose: {
       "2021-11-13": 4.3,
     },
@@ -197,5 +189,21 @@ export const healthData = {
     trig: {
       "2021-07-10": 0.5,
     },
+  },
+  "Koon Hian": {
+    fastingGlucose: { "2021-11-26": 4.5 },
+    hbA1c: { "2021-11-26": 5.5 },
+    hdl: { "2021-11-26": 1.13 },
+    ldl: { "2021-11-26": 3.0 },
+    tChol: { "2021-11-26": 4.75 },
+    trig: { "2021-11-26": 1.37 },
+  },
+  "Koon Hwee": {
+    fastingGlucose: { "2021-11-26": 3.8 },
+    hbA1c: { "2021-11-26": 5.6 },
+    hdl: { "2021-11-26": 1.44 },
+    ldl: { "2021-11-26": 1.47 },
+    tChol: { "2021-11-26": 3.32 },
+    trig: { "2021-11-26": 0.9 },
   },
 };

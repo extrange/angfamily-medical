@@ -1,23 +1,26 @@
 import { parseISO, compareDesc } from "date-fns";
 
-/** Get an extreme value for a `resultType` from `healthData`.
+/** Gets sorted rankings for the highest/lowest `resultType` from `healthData`.
  *
- * `latest`: Whether to only consider the latest result of each person (default: `true`)
+ * `latest`: Whether to only consider the latest result of each person (default: `true`),
+ * or all results ever taken by that person
  *
  * `highest`: Whether to take the highest value (default: `false`) or the lowest
+ * for each person
  *
- * Returns an object `{name, date, value}` or `null` if there were no results for that `resultType`*/
-export const getExtremeValue = (
+ * Returns an array of `{name, date, value}` sorted high to low if `highest=true`, else
+ * low to high.*/
+export const getSortedValues = (
   healthData,
   resultType,
   { latest = true, highest = false } = {}
 ) => {
-  let result = null;
+  let results = [];
 
   /* Loop through each person */
-  Object.entries(healthData).forEach(([person, results]) => {
+  Object.entries(healthData).forEach(([person, _results]) => {
     // Filter by resultType
-    let selectedResults = Object.entries(results[resultType] ?? {})
+    let relevantResults = Object.entries(_results[resultType] ?? {})
 
       // Convert date strings to Date() objects
       .map(([dateStr, value]) => [parseISO(dateStr), value])
@@ -25,44 +28,32 @@ export const getExtremeValue = (
       // Sort in reverse chronological order (latest first)
       .sort((a, b) => compareDesc(a[0], b[0]));
 
-    // If there were no results for this person, don't do anything
-    if (!selectedResults.length) return;
+    // If there were no results of resultType for this person, skip this person
+    if (!relevantResults.length) return;
 
     /* If latest=true, just use the latest result to compare.
     Otherwise, find the highest value if highest=true, else the lowest. */
-    let resultToCompare = latest
-      ? selectedResults[0]
-      : selectedResults.reduce((extremeVal, val) =>
+    let resultToAdd = latest
+      ? relevantResults[0]
+      : relevantResults.reduce((extremeVal, val) =>
           highest
-            ? val[1] > extremeVal[1]
+            ? val[1] >= extremeVal[1]
               ? val
               : extremeVal
-            : val[1] < extremeVal[1]
+            : val[1] <= extremeVal[1]
             ? val
             : extremeVal
         );
 
-    if (!result)
-      result = {
-        name: person,
-        date: resultToCompare[0],
-        value: resultToCompare[1],
-      };
-
-    if (highest && resultToCompare[1] > result.value) {
-      result = {
-        name: person,
-        date: resultToCompare[0],
-        value: resultToCompare[1],
-      };
-    } else if (!highest && resultToCompare[1] < result.value) {
-      result = {
-        name: person,
-        date: resultToCompare[0],
-        value: resultToCompare[1],
-      };
-    }
+    results.push({
+      name: person,
+      date: resultToAdd[0],
+      value: resultToAdd[1],
+    });
   });
 
-  return result;
+  //Sort high to low if `highest=true`
+  results.sort(({value: v1}, {value: v2}) => highest ? v2 - v1 : v1 - v2)
+
+  return results;
 };
