@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import "./App.css";
 import { Home } from "./views/Home";
 import { Leaderboard } from "./views/Leaderboard";
+import { ReferenceRanges } from "./views/ReferenceRanges";
 /* Which view to show, first here will be the default*/
 const views = {
   HOME: {
@@ -14,6 +15,10 @@ const views = {
     label: "Leaderboard",
     jsx: Leaderboard,
   },
+  REFERENCE_RANGES: {
+    label: "Reference Ranges",
+    jsx: ReferenceRanges,
+  }
 };
 
 export const App = () => {
