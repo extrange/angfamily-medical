@@ -1,18 +1,20 @@
 import { css } from "@emotion/react";
 import {
-    FormControl, InputLabel,
-    MenuItem,
-    Select,
-    Typography
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Typography,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import { Chart, registerables } from "chart.js";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 import { useMemo, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { healthData, resultTypes } from "../data";
 
 /* Register everything Chart.js requires */
-Chart.register(...registerables);
+Chart.register(ChartDataLabels, ...registerables);
 
 const StyledSelect = styled(Select)`
   width: 200px;
@@ -25,6 +27,24 @@ export const Home = () => {
 
   const persons = Object.keys(healthData).sort((a, b) => a.localeCompare(b));
 
+  const options = {
+    interaction: {
+      intersect: false,
+    },
+    plugins: {
+      datalabels: {
+        backgroundColor: "hotpink",
+        borderRadius: 4,
+        color: "black",
+        font: {
+          weight: "bold",
+        },
+        padding: 2,
+        formatter: (val) => val.y,
+      },
+    },
+  };
+
   const chartsToShow = useMemo(() => {
     if (!person)
       return (
@@ -34,19 +54,22 @@ export const Home = () => {
       );
 
     if (!resultType) {
-      return Object.entries(resultTypes).map(([k, v]) => (
+      return Object.entries(resultTypes).map(([resultType, { name }]) => (
         <Line
-          key={k}
+          key={resultType}
           data={{
             datasets: [
               {
-                label: v.name,
+                label: name,
                 backgroundColor: "hotpink",
                 borderColor: "hotpink",
-                data: healthData[person][k],
+                data: Object.entries(healthData[person][resultType]).map(
+                  ([date, result]) => ({ x: date, y: result })
+                ),
               },
             ],
           }}
+          options={options}
         />
       ));
     } else
@@ -58,10 +81,13 @@ export const Home = () => {
                 label: resultTypes[resultType].name,
                 backgroundColor: "hotpink",
                 borderColor: "hotpink",
-                data: healthData[person][resultType],
+                data: Object.entries(healthData[person][resultType]).map(
+                  ([date, result]) => ({ x: date, y: result })
+                ),
               },
             ],
           }}
+          options={options}
         />
       );
   }, [person, resultType]);
@@ -107,8 +133,10 @@ export const Home = () => {
               Show all
             </MenuItem>
             {Object.entries(resultTypes)
-              .sort(([, {name: v1}], [, {name: v2}]) => v1.localeCompare(v2))
-              .map(([k, {name}]) => (
+              .sort(([, { name: v1 }], [, { name: v2 }]) =>
+                v1.localeCompare(v2)
+              )
+              .map(([k, { name }]) => (
                 <MenuItem key={k} value={k}>
                   {name}
                 </MenuItem>

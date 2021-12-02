@@ -18,20 +18,24 @@ export const resultTypes = {
   },
   hbA1c: {
     name: "HbA1c, % (lower is better)",
-    leaderboardSort: (data, resultType) => getSortedValues(data, resultType),
+    leaderboardSort: getSortedValues,
   },
   ldl: {
     name: "LDL Cholesterol, mmol/L (lower is better)",
-    leaderboardSort: (data, resultType) => getSortedValues(data, resultType),
+    leaderboardSort: getSortedValues,
   },
-  hdl: { name: "HDL Cholesterol, mmol/L (lower is better)" },
+  hdl: {
+    name: "HDL Cholesterol, mmol/L (higher is better)",
+    leaderboardSort: (data, resultType, options) =>
+      getSortedValues(data, resultType, { ...options, highest: true }),
+  },
   tChol: {
     name: "Total Cholesterol, mmol/L (lower is better)",
-    leaderboardSort: (data, resultType) => getSortedValues(data, resultType),
+    leaderboardSort: getSortedValues,
   },
   trig: {
     name: "Triglycerides, mmol/L (lower is better)",
-    leaderboardSort: (data, resultType) => getSortedValues(data, resultType),
+    leaderboardSort: getSortedValues,
   },
 };
 
