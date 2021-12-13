@@ -2,23 +2,23 @@ import { css } from "@emotion/react";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 import React, { useState } from "react";
 import "./App.css";
-import { Home } from "./views/Home";
+import { Trend } from "./views/Trend";
 import { Leaderboard } from "./views/Leaderboard";
 import { ReferenceRanges } from "./views/ReferenceRanges";
 /* Which view to show, first here will be the default*/
 const views = {
-  HOME: {
-    label: "Home",
-    jsx: Home,
-  },
   LEADERBOARD: {
     label: "Leaderboard",
     jsx: Leaderboard,
   },
+  HOME: {
+    label: "Trend",
+    jsx: Trend,
+  },
   REFERENCE_RANGES: {
     label: "Reference Ranges",
     jsx: ReferenceRanges,
-  }
+  },
 };
 
 export const App = () => {
@@ -35,7 +35,7 @@ export const App = () => {
         max-width: 1000px;
       `}
     >
-      <Typography variant={"h4"} sx={{ mb: 2 }} align={'center'}>
+      <Typography variant={"h4"} sx={{ mb: 2 }} align={"center"}>
         Ang Family Health Viewer
       </Typography>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>

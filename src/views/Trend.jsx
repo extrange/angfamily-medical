@@ -21,11 +21,11 @@ const StyledSelect = styled(Select)`
   margin-right: 10px;
 `;
 
-export const Home = () => {
-  const [person, setPerson] = useState("");
-  const [resultType, setResultType] = useState("");
-
+export const Trend = () => {
   const persons = Object.keys(healthData).sort((a, b) => a.localeCompare(b));
+
+  const [person, setPerson] = useState(persons[0]);
+  const [resultType, setResultType] = useState("");
 
   const options = {
     interaction: {
